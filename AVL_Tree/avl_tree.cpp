@@ -226,7 +226,6 @@ void AVLTree::rank(int x) {
 }
 
 //노드 x의 depth를 출력하고 해당 노드를 삭제한다. 만약 노드 x가 없다면, 0을 출력한다.
-
 void AVLTree::erase(int x) {
 
 }
@@ -301,14 +300,15 @@ int AVLTree::isUnbalance(Node* curNode) {
     int balance_factor = calculateBalanceFactor(curNode);
     if (abs(balance_factor) < 2) return BALANCE;
 
-    if (balance_factor > 0) {
+    //공지사항 반영: yNode의 두 자식 노드가 동일한 경우(child_balance_factor==0) single rotation을 수행하도록 한다.
+    if (balance_factor > 0) { //LL 혹은 LR
         int child_balance_factor = calculateBalanceFactor(curNode->get_left_child());
-        return (child_balance_factor > 0) ? LEFT_LEFT : LEFT_RIGHT;
+        return (child_balance_factor < 0) ? LEFT_RIGHT : LEFT_LEFT; 
     }
 
     else {
         int child_balance_factor = calculateBalanceFactor(curNode->get_right_child());
-        return (child_balance_factor < 0) ? RIGHT_RIGHT : RIGHT_LEFT;
+        return (child_balance_factor > 0) ? RIGHT_LEFT : RIGHT_RIGHT;
     }
 
 }
