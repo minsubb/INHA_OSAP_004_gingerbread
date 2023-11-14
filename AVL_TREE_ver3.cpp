@@ -7,7 +7,7 @@
 #include <iostream>
 using namespace std;
 
-//balanceÇÏ´Ù¸é 0(=false), unbalanceÇÏ´Ù¸é 1~4(=true)
+//balanceí•˜ë‹¤ë©´ 0(=false), unbalanceí•˜ë‹¤ë©´ 1~4(=true)
 enum UNBLANCE_CASE {
     BALANCE = 0,
     LEFT_LEFT = 1,
@@ -27,17 +27,17 @@ enum UNBLANCE_CASE {
 
 struct Node {
 public:
-    //»ı¼ºÀÚ¿Í ¼Ò¸êÀÚ
+    //ìƒì„±ìì™€ ì†Œë©¸ì
     Node(int key) : key_(key), height_(1) { left_child_ = right_child_ = NULL; }
     ~Node() {}
 
-    //Á¢±ÙÀÚ
+    //ì ‘ê·¼ì
     int get_key() { return key_; }
     int get_height() { return height_; }
     Node* get_left_child() { return left_child_; }
     Node* get_right_child() { return right_child_; }
 
-    //Á¦¾îÀÚ
+    //ì œì–´ì
     void set_key(int key) { key_ = key; }
     void set_height(int height) { height_ = height; }
     void set_left_child(Node* left_child) { left_child_ = left_child; }
@@ -54,19 +54,19 @@ private:
 
 class AVLTree {
 public:
-    //»ı¼ºÀÚ
+    //ìƒì„±ì
     AVLTree() : root_(NULL), size_(0) {}
 
-    //Á¢±ÙÀÚ
+    //ì ‘ê·¼ì
     int get_size() { return size_; }
     Node* get_root() { return root_; }
 
-    //Á¦¾îÀÚ
+    //ì œì–´ì
     void increaseSize() { size_++; }
     void decreaseSize() { size_--; }
     void set_root(Node* root) { root_ = root; }
 
-    //¿ä±¸ »çÇ×(basic)
+    //ìš”êµ¬ ì‚¬í•­(basic)
     void empty() { (size_ == 0) ? printf("1\n") : printf("0\n"); }
     void size() { printf("%d\n", size_); }
     void minimum(int x);
@@ -74,12 +74,12 @@ public:
     void find(int x);
     void insert(int x);
 
-    //¿ä±¸ »çÇ×(advance)
+    //ìš”êµ¬ ì‚¬í•­(advance)
     void rank(int x);
     void erase(int x);
 
 private:
-    //³ëµå »óÅÂ °è»ê ÇÔ¼ö
+    //ë…¸ë“œ ìƒíƒœ ê³„ì‚° í•¨ìˆ˜
     Node* getNode(int key);
     int getDepth(Node* node);
     int getHeight(Node* node) { return (node == NULL) ? 0 : node->get_height(); }
@@ -88,7 +88,7 @@ private:
     int calculateHeight(Node* node);
     int getRank(Node* node, int x);
 
-    //±â´É ±¸ÇöÀ» À§ÇÑ Ãß°¡ÀûÀÎ ÇÔ¼ö
+    //ê¸°ëŠ¥ êµ¬í˜„ì„ ìœ„í•œ ì¶”ê°€ì ì¸ í•¨ìˆ˜
     Node* insert(Node* node, int key);
     Node* deleteNode(Node* node, int key);
     Node* minValueNode(Node* node);
@@ -125,7 +125,7 @@ int main() {
             string command;
             cin >> command;
 
-            //Ãß°¡ ÀÔ·Â(x) ºÒÇÊ¿ä
+            //ì¶”ê°€ ì…ë ¥(x) ë¶ˆí•„ìš”
             if (command == "empty") {
                 avlTree.empty();
                 continue;
@@ -135,7 +135,7 @@ int main() {
                 continue;
             }
 
-            //Ãß°¡ ÀÔ·Â(x) ÇÊ¿ä 
+            //ì¶”ê°€ ì…ë ¥(x) í•„ìš” 
             int x;
             cin >> x;
             if (command == "minimum") {
@@ -176,9 +176,9 @@ int main() {
 /*------------------------------------------------------------------------------------------------------------------*/
 
 
-//³ëµå xÀÇ depth¸¦ Ãâ·ÂÇÑ´Ù. ¸¸¾à ³ëµå x°¡ ¾ø´Ù¸é, 0À» Ãâ·ÂÇÑ´Ù.
+//ë…¸ë“œ xì˜ depthë¥¼ ì¶œë ¥í•œë‹¤. ë§Œì•½ ë…¸ë“œ xê°€ ì—†ë‹¤ë©´, 0ì„ ì¶œë ¥í•œë‹¤.
 void AVLTree::find(int x) {
-    Node* find_node = getNode(x); //key == xÀÎ ³ëµå Ã£±â
+    Node* find_node = getNode(x); //key == xì¸ ë…¸ë“œ ì°¾ê¸°
 
     if (find_node == NULL) printf("0\n");
     else printf("%d\n", getDepth(find_node));
@@ -186,24 +186,24 @@ void AVLTree::find(int x) {
     return;
 }
 
-//³ëµå x°¡ ·çÆ®ÀÎ ºÎºĞÆ®¸®¿¡¼­ ÃÖ´ë key¸¦ °®´Â ³ëµåÀÇ key¿Í depth¸¦ °ø¹éÀ¸·Î ±¸ºĞÇÏ¿© Ãâ·ÂÇÑ´Ù.
+//ë…¸ë“œ xê°€ ë£¨íŠ¸ì¸ ë¶€ë¶„íŠ¸ë¦¬ì—ì„œ ìµœëŒ€ keyë¥¼ ê°–ëŠ” ë…¸ë“œì˜ keyì™€ depthë¥¼ ê³µë°±ìœ¼ë¡œ êµ¬ë¶„í•˜ì—¬ ì¶œë ¥í•œë‹¤.
 void AVLTree::maximum(int x) {
-    Node* maximum_node = getNode(x); //key == xÀÎ ³ëµå Ã£±â -> sub root
+    Node* maximum_node = getNode(x); //key == xì¸ ë…¸ë“œ ì°¾ê¸° -> sub root
 
-    //ÃÖ´ë key: sub rootÀÇ °¡Àå ¿À¸¥ÂÊ ³ëµå -> loop·Î ÇØ´ç ÁöÁ¡±îÁö ³»·Á°£´Ù.
+    //ìµœëŒ€ key: sub rootì˜ ê°€ì¥ ì˜¤ë¥¸ìª½ ë…¸ë“œ -> loopë¡œ í•´ë‹¹ ì§€ì ê¹Œì§€ ë‚´ë ¤ê°„ë‹¤.
     while (maximum_node->get_right_child() != NULL) {
         maximum_node = maximum_node->get_right_child();
     }
     printf("%d %d\n", maximum_node->get_key(), getDepth(maximum_node));
-
+    
     return;
 }
 
-//³ëµå x°¡ ·çÆ®ÀÎ ºÎºĞÆ®¸®¿¡¼­ ÃÖ¼Ò key¸¦ °®´Â ³ëµåÀÇ key¿Í depth¸¦ °ø¹éÀ¸·Î ±¸ºĞÇÏ¿© Ãâ·ÂÇÑ´Ù.
+//ë…¸ë“œ xê°€ ë£¨íŠ¸ì¸ ë¶€ë¶„íŠ¸ë¦¬ì—ì„œ ìµœì†Œ keyë¥¼ ê°–ëŠ” ë…¸ë“œì˜ keyì™€ depthë¥¼ ê³µë°±ìœ¼ë¡œ êµ¬ë¶„í•˜ì—¬ ì¶œë ¥í•œë‹¤.
 void AVLTree::minimum(int x) {
     Node* minimum_node = getNode(x);
 
-    //ÃÖ¼Ò key: sub rootÀÇ °¡Àå ¿ŞÂÊ ³ëµå -> loop·Î ÇØ´ç ÁöÁ¡±îÁö ³»·Á°£´Ù.
+    //ìµœì†Œ key: sub rootì˜ ê°€ì¥ ì™¼ìª½ ë…¸ë“œ -> loopë¡œ í•´ë‹¹ ì§€ì ê¹Œì§€ ë‚´ë ¤ê°„ë‹¤.
     while (minimum_node->get_left_child() != NULL) {
         minimum_node = minimum_node->get_left_child();
     }
@@ -212,42 +212,43 @@ void AVLTree::minimum(int x) {
     return;
 }
 
-//»õ·Î¿î ³ëµå x¸¦ »ğÀÔÇÏ°í, ³ëµå xÀÇ depth¸¦ Ãâ·ÂÇÑ´Ù.
+//ìƒˆë¡œìš´ ë…¸ë“œ xë¥¼ ì‚½ì…í•˜ê³ , ë…¸ë“œ xì˜ depthë¥¼ ì¶œë ¥í•œë‹¤.
 void AVLTree::insert(int x) {
-    //³ëµå »ğÀÔ
+    //ë…¸ë“œ ì‚½ì…
     set_root(insert(root_, x));
     increaseSize();
 
-    Node* new_node = getNode(x); //»ğÀÔÇÑ ³ëµåÀÇ Æ÷ÀÎÅÍ °¡Á®¿À±â
+    Node* new_node = getNode(x); //ì‚½ì…í•œ ë…¸ë“œì˜ í¬ì¸í„° ê°€ì ¸ì˜¤ê¸°
     printf("%d\n", getDepth(new_node));
 
     return;
 }
 
-//³ëµå xÀÇ depth¿Í rank¸¦ °ø¹éÀ¸·Î ±¸ºĞÇÏ¿© Ãâ·ÂÇÑ´Ù. ¸¸¾à ³ëµå x°¡ ¾ø´Ù¸é, 0À» Ãâ·ÂÇÑ´Ù.
+
+//ë…¸ë“œ xì˜ depthì™€ rankë¥¼ ê³µë°±ìœ¼ë¡œ êµ¬ë¶„í•˜ì—¬ ì¶œë ¥í•œë‹¤. ë§Œì•½ ë…¸ë“œ xê°€ ì—†ë‹¤ë©´, 0ì„ ì¶œë ¥í•œë‹¤.
 void AVLTree::rank(int x)
 {
-    Node* rank_node = getNode(x); // key == xÀÎ ³ëµå Ã£±â
+    Node *rank_node = getNode(x); // key == xì¸ ë…¸ë“œ ì°¾ê¸°
 
-    if (rank_node == NULL) printf("0\n"); // ³ëµå x°¡ ¾ø´Ù¸é 0 Ãâ·Â
+    if (rank_node == NULL) printf("0\n"); // ë…¸ë“œ xê°€ ì—†ë‹¤ë©´ 0 ì¶œë ¥
     else
-    { // ³ëµå x°¡ Á¸ÀçÇÒ ¶§
+    { // ë…¸ë“œ xê°€ ì¡´ì¬í•  ë•Œ
         printf("%d ", getDepth(rank_node));
-        printf("%d\n", getRank(get_root(), rank_node->get_key()) + 1); // ³ëµå xÀÇ rank Ãâ·Â
+        printf("%d\n", getRank(get_root(), rank_node->get_key()) + 1); // ë…¸ë“œ xì˜ rank ì¶œë ¥
     }
 }
 
-//³ëµå xÀÇ depth¸¦ Ãâ·ÂÇÏ°í ÇØ´ç ³ëµå¸¦ »èÁ¦ÇÑ´Ù. ¸¸¾à ³ëµå x°¡ ¾ø´Ù¸é, 0À» Ãâ·ÂÇÑ´Ù.
+//ë…¸ë“œ xì˜ depthë¥¼ ì¶œë ¥í•˜ê³  í•´ë‹¹ ë…¸ë“œë¥¼ ì‚­ì œí•œë‹¤. ë§Œì•½ ë…¸ë“œ xê°€ ì—†ë‹¤ë©´, 0ì„ ì¶œë ¥í•œë‹¤.
 void AVLTree::erase(int x) {
-    Node* node_to_delete = getNode(x); // »èÁ¦ÇÒ ³ëµå Ã£±â
+    Node* node_to_delete = getNode(x); // ì‚­ì œí•  ë…¸ë“œ ì°¾ê¸°
     if (node_to_delete == NULL) {
-        printf("0\n"); // ³ëµå°¡ ¾øÀ¸¸é 0 Ãâ·Â
+        printf("0\n"); // ë…¸ë“œê°€ ì—†ìœ¼ë©´ 0 ì¶œë ¥
         return;
     }
 
-    printf("%d\n", getDepth(node_to_delete)); // »èÁ¦ÇÒ ³ëµåÀÇ ±íÀÌ Ãâ·Â
-    root_ = deleteNode(root_, x); // ³ëµå »èÁ¦ ¹× ·çÆ® ¾÷µ¥ÀÌÆ®
-    decreaseSize(); // Æ®¸® Å©±â °¨¼Ò
+    printf("%d\n", getDepth(node_to_delete)); // ì‚­ì œí•  ë…¸ë“œì˜ ê¹Šì´ ì¶œë ¥
+    root_ = deleteNode(root_, x); // ë…¸ë“œ ì‚­ì œ ë° ë£¨íŠ¸ ì—…ë°ì´íŠ¸
+    decreaseSize(); // íŠ¸ë¦¬ í¬ê¸° ê°ì†Œ
 }
 
 
@@ -260,16 +261,16 @@ void AVLTree::erase(int x) {
 /*------------------------------------------------------------------------------------------------------------------*/
 
 
-//ÁÖ¾îÁø key¿Í ÀÏÄ¡ÇÏ´Â ³ëµå¸¦ Ã£¾Æ ³ëµåÀÇ Æ÷ÀÎÅÍ¸¦ ¹İÈ¯ÇÑ´Ù.
+//ì£¼ì–´ì§„ keyì™€ ì¼ì¹˜í•˜ëŠ” ë…¸ë“œë¥¼ ì°¾ì•„ ë…¸ë“œì˜ í¬ì¸í„°ë¥¼ ë°˜í™˜í•œë‹¤.
 Node* AVLTree::getNode(int key) {
-    Node* current_node = get_root(); //rootºÎÅÍ ½ÃÀÛ
+    Node* current_node = get_root(); //rootë¶€í„° ì‹œì‘
 
     while (true) {
-        if (current_node == NULL) return NULL; //Ã£±â ½ÇÆĞ
-        else if (current_node->get_key() == key) return current_node; //Ã£±â ¼º°ø
+        if (current_node == NULL) return NULL; //ì°¾ê¸° ì‹¤íŒ¨
+        else if (current_node->get_key() == key) return current_node; //ì°¾ê¸° ì„±ê³µ
 
-        //AVL treeÀÇ ¼ºÁúÀ» °í·ÁÇÏ¿©, ¿ŞÂÊ È¤Àº ¾Æ·¡ÂÊÀ¸·Î ³»·Á°¡¸ç Å½»öÇÑ´Ù.
-        current_node = (current_node->get_key() < key) ?
+        //AVL treeì˜ ì„±ì§ˆì„ ê³ ë ¤í•˜ì—¬, ì™¼ìª½ í˜¹ì€ ì•„ë˜ìª½ìœ¼ë¡œ ë‚´ë ¤ê°€ë©° íƒìƒ‰í•œë‹¤.
+        current_node = (current_node->get_key() < key) ? 
             current_node->get_right_child() : current_node->get_left_child();
     }
 
@@ -277,9 +278,9 @@ Node* AVLTree::getNode(int key) {
 }
 
 
-//ÁÖ¾îÁø ³ëµå¿¡ ´ëÇØ ±íÀÌ(depth)¸¦ °è»êÇÏ¿© ¹İÈ¯ÇÑ´Ù.
+//ì£¼ì–´ì§„ ë…¸ë“œì— ëŒ€í•´ ê¹Šì´(depth)ë¥¼ ê³„ì‚°í•˜ì—¬ ë°˜í™˜í•œë‹¤.
 int AVLTree::getDepth(Node* current_node) {
-    if (current_node == get_root()) return 0; //rootÀÇ ±íÀÌ´Â 0À¸·Î Á¤ÀÇ
+    if (current_node == get_root()) return 0; //rootì˜ ê¹Šì´ëŠ” 0ìœ¼ë¡œ ì •ì˜
 
     int depth = 0;
     int key = current_node->get_key();
@@ -287,8 +288,8 @@ int AVLTree::getDepth(Node* current_node) {
     while (true) {
         if (current_node == tempNode) return depth;
 
-        //AVL treeÀÇ ¼ºÁúÀ» °í·ÁÇÏ¿©, ¿ŞÂÊ È¤Àº ¾Æ·¡ÂÊÀ¸·Î ³»·Á°¡¸ç depth¸¦ Áõ°¡½ÃÅ²´Ù.
-        tempNode = (tempNode->get_key() < key) ?
+        //AVL treeì˜ ì„±ì§ˆì„ ê³ ë ¤í•˜ì—¬, ì™¼ìª½ í˜¹ì€ ì•„ë˜ìª½ìœ¼ë¡œ ë‚´ë ¤ê°€ë©° depthë¥¼ ì¦ê°€ì‹œí‚¨ë‹¤.
+        tempNode = (tempNode->get_key() < key) ? 
             tempNode->get_right_child() : tempNode->get_left_child();
 
         depth++;
@@ -296,9 +297,9 @@ int AVLTree::getDepth(Node* current_node) {
 }
 
 
-//ÁÖ¾îÁø ³ëµå¿¡ ´ëÇØ ³ôÀÌ(height)¸¦ °è»êÇÏ¿© ¹İÈ¯ÇÑ´Ù.
+//ì£¼ì–´ì§„ ë…¸ë“œì— ëŒ€í•´ ë†’ì´(height)ë¥¼ ê³„ì‚°í•˜ì—¬ ë°˜í™˜í•œë‹¤.
 int AVLTree::calculateHeight(Node* node) {
-    if (node == NULL) return -1; //Á¸ÀçÇÏÁö ¾Ê´Â ³ëµåÀÇ ³ôÀÌ´Â -1, ¸®ÇÁ ³ëµåÀÇ ³ôÀÌ´Â 0À¸·Î Á¤ÀÇ
+    if (node == NULL) return -1; //ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ë…¸ë“œì˜ ë†’ì´ëŠ” -1, ë¦¬í”„ ë…¸ë“œì˜ ë†’ì´ëŠ” 0ìœ¼ë¡œ ì •ì˜
 
     int left_child_height = getHeight(node->get_left_child());
     int right_child_height = getHeight(node->get_right_child());
@@ -307,9 +308,9 @@ int AVLTree::calculateHeight(Node* node) {
 }
 
 
-//ÁÖ¾îÁø ³ëµå¿¡ ´ëÇØ ±ÕÇü ÀÎ¼ö(balance factor, left-right)¸¦ °è»êÇÏ¿© ¹İÈ¯ÇÑ´Ù. ¹İÈ¯°ªÀº -2~2 »çÀÌÀÌ´Ù.
+//ì£¼ì–´ì§„ ë…¸ë“œì— ëŒ€í•´ ê· í˜• ì¸ìˆ˜(balance factor, left-right)ë¥¼ ê³„ì‚°í•˜ì—¬ ë°˜í™˜í•œë‹¤. ë°˜í™˜ê°’ì€ -2~2 ì‚¬ì´ì´ë‹¤.
 int AVLTree::calculateBalanceFactor(Node* node) {
-    if (node == NULL) return 0; //Á¸ÀçÇÏÁö ¾Ê´Â ³ëµåÀÇ ±ÕÇüÀÎ¼ö´Â 0À¸·Î Á¤ÀÇ
+    if (node == NULL) return 0; //ì¡´ì¬í•˜ì§€ ì•ŠëŠ” ë…¸ë“œì˜ ê· í˜•ì¸ìˆ˜ëŠ” 0ìœ¼ë¡œ ì •ì˜
 
     int left_child_height = getHeight(node->get_left_child());
     int right_child_height = getHeight(node->get_right_child());
@@ -318,26 +319,27 @@ int AVLTree::calculateBalanceFactor(Node* node) {
 }
 
 
-//ÁÖ¾îÁø ³ëµå¿¡ ´ëÇØ ±ÕÇü ¿©ºÎ¸¦ ÆÇ´ÜÇÏ¿© ¹İÈ¯ÇÑ´Ù. ¹İÈ¯°ªÀº 0(BALANCE), 1~4(UNBALNCE) »çÀÌÀÌ´Ù.
+//ì£¼ì–´ì§„ ë…¸ë“œì— ëŒ€í•´ ê· í˜• ì—¬ë¶€ë¥¼ íŒë‹¨í•˜ì—¬ ë°˜í™˜í•œë‹¤. ë°˜í™˜ê°’ì€ 0(BALANCE), 1~4(UNBALNCE) ì‚¬ì´ì´ë‹¤.
 int AVLTree::isUnbalance(Node* curNode) {
     int balance_factor = calculateBalanceFactor(curNode);
     if (abs(balance_factor) < 2) return BALANCE;
 
-    if (balance_factor > 0) {
+    //ê³µì§€ì‚¬í•­ ë°˜ì˜: yNodeì˜ ë‘ ìì‹ ë…¸ë“œê°€ ë™ì¼í•œ ê²½ìš°(child_balance_factor==0) single rotationì„ ìˆ˜í–‰í•˜ë„ë¡ í•œë‹¤.
+    if (balance_factor > 0) { //LL í˜¹ì€ LR
         int child_balance_factor = calculateBalanceFactor(curNode->get_left_child());
-        return (child_balance_factor > 0) ? LEFT_LEFT : LEFT_RIGHT;
+        return (child_balance_factor < 0) ? LEFT_RIGHT : LEFT_LEFT; 
     }
 
     else {
         int child_balance_factor = calculateBalanceFactor(curNode->get_right_child());
-        return (child_balance_factor < 0) ? RIGHT_RIGHT : RIGHT_LEFT;
+        return (child_balance_factor > 0) ? RIGHT_LEFT : RIGHT_RIGHT;
     }
 
 }
 
-//ÁÖ¾îÁø ³ëµåÀÇ rank ¹İÈ¯. Àç±ÍÇÔ¼ö¸¦ ÅëÇØ ÀÚ½Åº¸´Ù ÀÛÀº °ªÀÇ °¹¼ö¸¦ ´õÇØÁØ´Ù.
+//ì£¼ì–´ì§„ ë…¸ë“œì˜ rank ë°˜í™˜. ì¬ê·€í•¨ìˆ˜ë¥¼ í†µí•´ ìì‹ ë³´ë‹¤ ì‘ì€ ê°’ì˜ ê°¯ìˆ˜ë¥¼ ë”í•´ì¤€ë‹¤.
 int AVLTree::getRank(Node* node, int x) {
-    if (node == NULL) return 0; // ³ëµå°¡ Á¸ÀçÇÏÁö ¾ÊÀ¸¸é 0 ¸®ÅÏ
+    if (node == NULL) return 0; // ë…¸ë“œê°€ ì¡´ì¬í•˜ì§€ ì•Šìœ¼ë©´ 0 ë¦¬í„´
 
     int rank = 0;
     if (node->get_key() < x) rank++;
@@ -348,31 +350,31 @@ int AVLTree::getRank(Node* node, int x) {
     return rank;
 }
 
-//½ÇÁúÀûÀÎ »ğÀÔÀ» ¼öÇàÇÑ µÚ, ¼­ºê Æ®¸®ÀÇ ·çÆ® ³ëµå¸¦ ¹İÈ¯ÇÑ´Ù.
+//ì‹¤ì§ˆì ì¸ ì‚½ì…ì„ ìˆ˜í–‰í•œ ë’¤, ì„œë¸Œ íŠ¸ë¦¬ì˜ ë£¨íŠ¸ ë…¸ë“œë¥¼ ë°˜í™˜í•œë‹¤.
 Node* AVLTree::insert(Node* node, int key) {
-    //º»ÀÎÀÇ ÀÚ¸®¸¦ Ã£Àº °æ¿ì -> »õ ³ëµå¸¦ ÇÒ´çÇÏ¿© ¹İÈ¯
+    //ë³¸ì¸ì˜ ìë¦¬ë¥¼ ì°¾ì€ ê²½ìš° -> ìƒˆ ë…¸ë“œë¥¼ í• ë‹¹í•˜ì—¬ ë°˜í™˜
     if (node == NULL) {
         return new Node(key);
     }
 
-    //º»ÀÎÀÇ ÀÚ¸®¸¦ Ã£Áö ¸øÇÑ °æ¿ì -> Àç±ÍÀûÀ¸·Î ³»·Á°¡¸ç »ğÀÔ À§Ä¡ Å½»ö
+    //ë³¸ì¸ì˜ ìë¦¬ë¥¼ ì°¾ì§€ ëª»í•œ ê²½ìš° -> ì¬ê·€ì ìœ¼ë¡œ ë‚´ë ¤ê°€ë©° ì‚½ì… ìœ„ì¹˜ íƒìƒ‰
     (node->get_key() < key) ?
-        node->set_right_child(insert(node->get_right_child(), key)) :
+        node->set_right_child(insert(node->get_right_child(), key)):
         node->set_left_child(insert(node->get_left_child(), key));
 
-    //º»ÀÎÀÇ ÇÏÀ§¿¡ »õ·Î¿î ÀÚ½Ä ³ëµå°¡ Ãß°¡µÇ¾úÀ¸¹Ç·Î ³ôÀÌ Àç°è»ê
+    //ë³¸ì¸ì˜ í•˜ìœ„ì— ìƒˆë¡œìš´ ìì‹ ë…¸ë“œê°€ ì¶”ê°€ë˜ì—ˆìœ¼ë¯€ë¡œ ë†’ì´ ì¬ê³„ì‚°
     node->set_height(calculateHeight(node));
 
-    //Àç±¸Á¶È­ ÁøÇà
+    //ì¬êµ¬ì¡°í™” ì§„í–‰
     return restruct(node);
-
+    
 }
 
-//½ÇÁúÀûÀÎ »èÁ¦¸¦ ¼öÇàÇÑ µÚ, ¼­ºê Æ®¸®ÀÇ ·çÆ® ³ëµå¸¦ ¹İÈ¯ÇÑ´Ù.
+//ì‹¤ì§ˆì ì¸ ì‚­ì œë¥¼ ìˆ˜í–‰í•œ ë’¤, ì„œë¸Œ íŠ¸ë¦¬ì˜ ë£¨íŠ¸ ë…¸ë“œë¥¼ ë°˜í™˜í•œë‹¤.
 Node* AVLTree::deleteNode(Node* root, int key) {
     if (root == NULL) return root;
 
-    // »èÁ¦ÇÒ Å°¸¦ Ã£À½
+    // ì‚­ì œí•  í‚¤ë¥¼ ì°¾ìŒ
     if (key < root->get_key()) {
         root->set_left_child(deleteNode(root->get_left_child(), key));
     }
@@ -380,40 +382,40 @@ Node* AVLTree::deleteNode(Node* root, int key) {
         root->set_right_child(deleteNode(root->get_right_child(), key));
     }
     else {
-        // key == root->get_key()·Î »èÁ¦ÇÒ ³ëµå¸¦ Ã£Àº °ÍÀÌ´Ï »èÁ¦ ¼öÇà
+        // key == root->get_key()ë¡œ ì‚­ì œí•  ë…¸ë“œë¥¼ ì°¾ì€ ê²ƒì´ë‹ˆ ì‚­ì œ ìˆ˜í–‰
         if ((root->get_left_child() == NULL) || (root->get_right_child() == NULL)) {
             Node* temp = root->get_left_child() ? root->get_left_child() : root->get_right_child();
 
-            // ÀÚ½Ä ³ëµå°¡ ¾ø´Â °æ¿ì Á÷Á¢ »èÁ¦
+            // ìì‹ ë…¸ë“œê°€ ì—†ëŠ” ê²½ìš° ì§ì ‘ ì‚­ì œ
             if (temp == NULL) {
                 temp = root;
                 root = NULL;
             }
             else {
-                // ÇÑ °³ÀÇ ÀÚ½ÄÀ» °¡Áø °æ¿ì ÀÚ½Ä ³ëµå¸¦ »èÁ¦ÇÒ ³ëµåÀÇ À§Ä¡·Î ÀÌµ¿½ÃÅ´
+                // í•œ ê°œì˜ ìì‹ì„ ê°€ì§„ ê²½ìš° ìì‹ ë…¸ë“œë¥¼ ì‚­ì œí•  ë…¸ë“œì˜ ìœ„ì¹˜ë¡œ ì´ë™ì‹œí‚´
                 *root = *temp;
             }
             delete temp;
         }
         else {
-            // µÎ °³ÀÇ ÀÚ½ÄÀ» °¡Áø °æ¿ì ÈÄÀÓÀÚ¸¦ ÀÌ¿ëÇÏ¿© »èÁ¦ ¼öÇà
+            // ë‘ ê°œì˜ ìì‹ì„ ê°€ì§„ ê²½ìš° í›„ì„ìë¥¼ ì´ìš©í•˜ì—¬ ì‚­ì œ ìˆ˜í–‰
             Node* temp = minValueNode(root->get_right_child());
             root->set_key(temp->get_key());
             root->set_right_child(deleteNode(root->get_right_child(), temp->get_key()));
         }
     }
 
-    // Æ®¸®°¡ ºñ¾îÀÖ´Â °æ¿ì
+    // íŠ¸ë¦¬ê°€ ë¹„ì–´ìˆëŠ” ê²½ìš°
     if (root == NULL) return root;
 
-    // ³ôÀÌ ¾÷µ¥ÀÌÆ®
+    // ë†’ì´ ì—…ë°ì´íŠ¸
     root->set_height(calculateHeight(root));
 
-    // ±ÕÇü ÀçÁ¶Á¤
+    // ê· í˜• ì¬ì¡°ì •
     return restruct(root);
 }
 
-// ÁÖ¾îÁø ³ëµåÀÇ ¼­ºêÆ®¸®¿¡¼­ °¡Àå ÀÛÀº °ªÀ» °¡Áø ³ëµå¸¦ Ã£¾Æ ¹İÈ¯ÇÑ´Ù.
+// ì£¼ì–´ì§„ ë…¸ë“œì˜ ì„œë¸ŒíŠ¸ë¦¬ì—ì„œ ê°€ì¥ ì‘ì€ ê°’ì„ ê°€ì§„ ë…¸ë“œë¥¼ ì°¾ì•„ ë°˜í™˜í•œë‹¤.
 Node* AVLTree::minValueNode(Node* node) {
     Node* current = node;
     while (current->get_left_child() != NULL) {
@@ -422,15 +424,15 @@ Node* AVLTree::minValueNode(Node* node) {
     return current;
 }
 
-//ÁÖ¾îÁø ³ëµå°¡ ºÒ±ÕÇüÇÑ °æ¿ì ÀûÀıÈ÷ È¸ÀüÇÏ¿© ±ÕÇüÀ» ¸ÂÃá µÚ, ¼­ºê Æ®¸®ÀÇ ·çÆ® ³ëµå¸¦ ¹İÈ¯ÇÑ´Ù.
+//ì£¼ì–´ì§„ ë…¸ë“œê°€ ë¶ˆê· í˜•í•œ ê²½ìš° ì ì ˆíˆ íšŒì „í•˜ì—¬ ê· í˜•ì„ ë§ì¶˜ ë’¤, ì„œë¸Œ íŠ¸ë¦¬ì˜ ë£¨íŠ¸ ë…¸ë“œë¥¼ ë°˜í™˜í•œë‹¤.
 Node* AVLTree::restruct(Node* node) {
-    switch (isUnbalance(node)) { //±ÕÇü ¿©ºÎ ÆÇ´Ü
-        //±ÕÇü -> 0¹øÀÇ È¸Àü ÇÊ¿ä
+    switch (isUnbalance(node)) { //ê· í˜• ì—¬ë¶€ íŒë‹¨
+    //ê· í˜• -> 0ë²ˆì˜ íšŒì „ í•„ìš”
     case BALANCE: {
         return node;
     }
 
-                //ºÒ±ÕÇü1 -> 1¹øÀÇ È¸Àü ÇÊ¿ä(single rotate)
+    //ë¶ˆê· í˜•1 -> 1ë²ˆì˜ íšŒì „ í•„ìš”(single rotate)
     case LEFT_LEFT: {
         return rightRotate(node);
     }
@@ -438,7 +440,7 @@ Node* AVLTree::restruct(Node* node) {
         return leftRotate(node);
     }
 
-                    //ºÒ±ÕÇü -> 2¹øÀÇ È¸Àü ÇÊ¿ä(double rotate)
+    //ë¶ˆê· í˜• -> 2ë²ˆì˜ íšŒì „ í•„ìš”(double rotate)
     case LEFT_RIGHT: {
         Node* child_node = node->get_left_child();
         node->set_left_child(leftRotate(child_node));
@@ -453,32 +455,32 @@ Node* AVLTree::restruct(Node* node) {
     return node;
 }
 
-//¹®Á¦°¡ µÈ ³ëµå¸¦ ÀÎ¼ö·Î ¹Ş¾Æ ¿À¸¥ÂÊ È¸ÀüÇÑ µÚ, ±× °á°ú(sub tree) »õ·Ó°Ô ·çÆ®°¡ µÈ ³ëµå¸¦ ¹İÈ¯ÇÑ´Ù.
+//ë¬¸ì œê°€ ëœ ë…¸ë“œë¥¼ ì¸ìˆ˜ë¡œ ë°›ì•„ ì˜¤ë¥¸ìª½ íšŒì „í•œ ë’¤, ê·¸ ê²°ê³¼(sub tree) ìƒˆë¡­ê²Œ ë£¨íŠ¸ê°€ ëœ ë…¸ë“œë¥¼ ë°˜í™˜í•œë‹¤.
 Node* AVLTree::rightRotate(Node* zNode) {
     Node* yNode = zNode->get_left_child();
     Node* tNode = yNode->get_right_child();
 
-    //È¸Àü ¼öÇà
+    //íšŒì „ ìˆ˜í–‰
     yNode->set_right_child(zNode);
     zNode->set_left_child(tNode);
 
-    //È¸ÀüÇÏ¸é¼­ À§Ä¡°¡ ´Ş¶óÁ³À¸¹Ç·Î ³ôÀÌ Àç°è»ê
+    //íšŒì „í•˜ë©´ì„œ ìœ„ì¹˜ê°€ ë‹¬ë¼ì¡Œìœ¼ë¯€ë¡œ ë†’ì´ ì¬ê³„ì‚°
     zNode->set_height(calculateHeight(zNode));
     yNode->set_height(calculateHeight(yNode));
 
     return yNode;
 }
 
-//¹®Á¦°¡ µÈ ³ëµå¸¦ ÀÎ¼ö·Î ¹Ş¾Æ ¿ŞÂÊ È¸ÀüÇÑ µÚ, ±× °á°ú(sub tree) »õ·Ó°Ô ·çÆ®°¡ µÈ ³ëµå¸¦ ¹İÈ¯ÇÑ´Ù.
+//ë¬¸ì œê°€ ëœ ë…¸ë“œë¥¼ ì¸ìˆ˜ë¡œ ë°›ì•„ ì™¼ìª½ íšŒì „í•œ ë’¤, ê·¸ ê²°ê³¼(sub tree) ìƒˆë¡­ê²Œ ë£¨íŠ¸ê°€ ëœ ë…¸ë“œë¥¼ ë°˜í™˜í•œë‹¤.
 Node* AVLTree::leftRotate(Node* zNode) {
     Node* yNode = zNode->get_right_child();
     Node* tNode = yNode->get_left_child();
 
-    //È¸Àü ¼öÇà
+    //íšŒì „ ìˆ˜í–‰
     yNode->set_left_child(zNode);
     zNode->set_right_child(tNode);
 
-    //È¸ÀüÇÏ¸é¼­ À§Ä¡°¡ ´Ş¶óÁ³À¸¹Ç·Î ³ôÀÌ Àç°è»ê
+    //íšŒì „í•˜ë©´ì„œ ìœ„ì¹˜ê°€ ë‹¬ë¼ì¡Œìœ¼ë¯€ë¡œ ë†’ì´ ì¬ê³„ì‚°
     zNode->set_height(calculateHeight(zNode));
     yNode->set_height(calculateHeight(yNode));
 
