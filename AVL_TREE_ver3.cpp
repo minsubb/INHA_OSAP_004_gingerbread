@@ -46,7 +46,7 @@ public:
 private:
 
     int key_;
-    int height_;
+    int height_; //삽입/삭제를 O(log n)에 수행하기 위해 추가한 멤버 변수
     Node* left_child_;
     Node* right_child_;
 };
@@ -180,6 +180,8 @@ int main() {
 void AVLTree::find(int x) {
     Node* find_node = getNode(x); //key == x인 노드 찾기
 
+    //getNode()는 해당 노드가 존재할 때 노드의 포인터를, 없다면 NULL을 반환한다. 
+    //따라서 find_node가 NULL이라면 노드가 없다는 뜻이므로 0을 출력하고, 아니라면 노드의 depth를 출력한다.
     if (find_node == NULL) printf("0\n");
     else printf("%d\n", getDepth(find_node));
 
@@ -190,8 +192,8 @@ void AVLTree::find(int x) {
 void AVLTree::maximum(int x) {
     Node* maximum_node = getNode(x); //key == x인 노드 찾기 -> sub root
 
-    //최대 key: sub root의 가장 오른쪽 노드 -> loop로 해당 지점까지 내려간다.
-    while (maximum_node->get_right_child() != NULL) {
+    //최대 key는 sub root의 가장 최하단에 위치한 오른쪽 노드이므로 loop로 해당 지점까지 내려간다.
+    while (maximum_node->get_right_child() != NULL) { //오른쪽 자식이 NULL이라면 최대로 내려온 것이므로 반복문 종료
         maximum_node = maximum_node->get_right_child();
     }
     printf("%d %d\n", maximum_node->get_key(), getDepth(maximum_node));
@@ -203,8 +205,8 @@ void AVLTree::maximum(int x) {
 void AVLTree::minimum(int x) {
     Node* minimum_node = getNode(x);
 
-    //최소 key: sub root의 가장 왼쪽 노드 -> loop로 해당 지점까지 내려간다.
-    while (minimum_node->get_left_child() != NULL) {
+    //최소 key는 sub root의 가장 최하단에 위치한 왼쪽 노드이므로 loop로 해당 지점까지 내려간다.
+    while (minimum_node->get_left_child() != NULL) { //왼쪽 자식이 NULL이라면 최대로 내려온 것이므로 반복문 종료
         minimum_node = minimum_node->get_left_child();
     }
     printf("%d %d\n", minimum_node->get_key(), getDepth(minimum_node));
@@ -214,12 +216,11 @@ void AVLTree::minimum(int x) {
 
 //새로운 노드 x를 삽입하고, 노드 x의 depth를 출력한다.
 void AVLTree::insert(int x) {
-    //노드 삽입
-    set_root(insert(root_, x));
-    increaseSize();
+    set_root(insert(root_, x)); //노드 삽입: 실질적인 삽입은 private 함수에서 수행한다.
+    increaseSize(); //노드가 추가되었으므로 size를 1 증가시킨다.
 
     Node* new_node = getNode(x); //삽입한 노드의 포인터 가져오기
-    printf("%d\n", getDepth(new_node));
+    printf("%d\n", getDepth(new_node)); //삽입한 노드의 depth를 출력한다.
 
     return;
 }
@@ -269,7 +270,7 @@ Node* AVLTree::getNode(int key) {
         if (current_node == NULL) return NULL; //찾기 실패
         else if (current_node->get_key() == key) return current_node; //찾기 성공
 
-        //AVL tree의 성질을 고려하여, 왼쪽 혹은 아래쪽으로 내려가며 탐색한다.
+        //AVL tree의 성질(left child < root < right child)을 고려하여, 왼쪽 혹은 아래쪽으로 내려가며 탐색한다.
         current_node = (current_node->get_key() < key) ? 
             current_node->get_right_child() : current_node->get_left_child();
     }
@@ -282,13 +283,14 @@ Node* AVLTree::getNode(int key) {
 int AVLTree::getDepth(Node* current_node) {
     if (current_node == get_root()) return 0; //root의 깊이는 0으로 정의
 
+    //root부터 시작하여 특정 노드(current_node)를 찾을 때까지 내려갈 때마다 depth를 1증가시키며 카운트한다.
     int depth = 0;
     int key = current_node->get_key();
     Node* tempNode = root_;
     while (true) {
         if (current_node == tempNode) return depth;
 
-        //AVL tree의 성질을 고려하여, 왼쪽 혹은 아래쪽으로 내려가며 depth를 증가시킨다.
+        //이때 AVL tree의 성질(left child < root < right child)을 고려하여, 왼쪽 혹은 아래쪽으로 내려간다.
         tempNode = (tempNode->get_key() < key) ? 
             tempNode->get_right_child() : tempNode->get_left_child();
 
@@ -301,6 +303,8 @@ int AVLTree::getDepth(Node* current_node) {
 int AVLTree::calculateHeight(Node* node) {
     if (node == NULL) return -1; //존재하지 않는 노드의 높이는 -1, 리프 노드의 높이는 0으로 정의
 
+    //높이의 정의:두 자식 노드 중 중 더 큰 height를 가지는 자식 노드의 height + 1
+    //따라서 하위 자식 노드의 height를 재귀적으로 구해 비교한다.
     int left_child_height = getHeight(node->get_left_child());
     int right_child_height = getHeight(node->get_right_child());
 
@@ -312,6 +316,8 @@ int AVLTree::calculateHeight(Node* node) {
 int AVLTree::calculateBalanceFactor(Node* node) {
     if (node == NULL) return 0; //존재하지 않는 노드의 균형인수는 0으로 정의
 
+    //균형인수의 정의: 두 자식 노드의 높이차 -> left child - right child로 정의
+    //이후 isUnBalance에서 불균형 케이스(UNBLANCE_CASE)를 분류하기 위해 절댓값은 씌우지 않고 반환한다.
     int left_child_height = getHeight(node->get_left_child());
     int right_child_height = getHeight(node->get_right_child());
 
@@ -325,13 +331,14 @@ int AVLTree::isUnbalance(Node* curNode) {
     if (abs(balance_factor) < 2) return BALANCE;
 
     //공지사항 반영: yNode의 두 자식 노드가 동일한 경우(child_balance_factor==0) single rotation을 수행하도록 한다.
-    if (balance_factor > 0) { //LL 혹은 LR
-        int child_balance_factor = calculateBalanceFactor(curNode->get_left_child());
+    //cf. 기존 코드는 yNode의 balance_factor=1일 때만 LEFT_LEFT로 반환했지만, 공지사항에 따라 1 or 0인 경우로 조건문을 바꾸었다.
+    if (balance_factor > 0) { //zNode의 balance_factor == 2: LL 혹은 LR
+        int child_balance_factor = calculateBalanceFactor(curNode->get_left_child()); //yNode의 balance_factor
         return (child_balance_factor < 0) ? LEFT_RIGHT : LEFT_LEFT; 
     }
 
-    else {
-        int child_balance_factor = calculateBalanceFactor(curNode->get_right_child());
+    else { //zNode의 balance_factor == -2: RR 혹은 RL
+        int child_balance_factor = calculateBalanceFactor(curNode->get_right_child()); //yNode의 balance_factor
         return (child_balance_factor > 0) ? RIGHT_LEFT : RIGHT_RIGHT;
     }
 
@@ -358,6 +365,7 @@ Node* AVLTree::insert(Node* node, int key) {
     }
 
     //본인의 자리를 찾지 못한 경우 -> 재귀적으로 내려가며 삽입 위치 탐색
+    //AVL tree의 성질(left child < root < right child)을 고려하여, 왼쪽 혹은 아래쪽으로 내려간다.
     (node->get_key() < key) ?
         node->set_right_child(insert(node->get_right_child(), key)):
         node->set_left_child(insert(node->get_left_child(), key));
@@ -426,7 +434,7 @@ Node* AVLTree::minValueNode(Node* node) {
 
 //주어진 노드가 불균형한 경우 적절히 회전하여 균형을 맞춘 뒤, 서브 트리의 루트 노드를 반환한다.
 Node* AVLTree::restruct(Node* node) {
-    switch (isUnbalance(node)) { //균형 여부 판단
+    switch (isUnbalance(node)) { //균형 여부 판단은 isUnbalance에서 수행하여 반환
     //균형 -> 0번의 회전 필요
     case BALANCE: {
         return node;
@@ -440,16 +448,16 @@ Node* AVLTree::restruct(Node* node) {
         return leftRotate(node);
     }
 
-    //불균형 -> 2번의 회전 필요(double rotate)
+    //불균형2 -> 2번의 회전 필요(double rotate)
     case LEFT_RIGHT: {
-        Node* child_node = node->get_left_child();
-        node->set_left_child(leftRotate(child_node));
-        return rightRotate(node);
+        Node* child_node = node->get_left_child(); //yNode 포인터 저장
+        node->set_left_child(leftRotate(child_node)); //yNode에 대해 left rotate 수행
+        return rightRotate(node); //zNode에 대해 right rotate 수행
     }
     case RIGHT_LEFT: {
-        Node* child_node = node->get_right_child();
-        node->set_right_child(rightRotate(child_node));
-        return leftRotate(node);
+        Node* child_node = node->get_right_child(); //yNode 포인터 저장
+        node->set_right_child(rightRotate(child_node)); //yNode에 대해 right rotate 수행
+        return leftRotate(node); //zNode에 대해 left rotate 수행
     }
     }
     return node;
@@ -457,12 +465,12 @@ Node* AVLTree::restruct(Node* node) {
 
 //문제가 된 노드를 인수로 받아 오른쪽 회전한 뒤, 그 결과(sub tree) 새롭게 루트가 된 노드를 반환한다.
 Node* AVLTree::rightRotate(Node* zNode) {
-    Node* yNode = zNode->get_left_child();
+    Node* yNode = zNode->get_left_child(); //회전 결과 sub root가 될 노드
     Node* tNode = yNode->get_right_child();
 
     //회전 수행
-    yNode->set_right_child(zNode);
-    zNode->set_left_child(tNode);
+    yNode->set_right_child(zNode); //yNode의 right child를 tNode에서 zNode로 바꾼다.
+    zNode->set_left_child(tNode); //zNode의 left child를 yNode에서 yNode의 기존 right child(=tNode)로 바꾼다.
 
     //회전하면서 위치가 달라졌으므로 높이 재계산
     zNode->set_height(calculateHeight(zNode));
@@ -473,16 +481,16 @@ Node* AVLTree::rightRotate(Node* zNode) {
 
 //문제가 된 노드를 인수로 받아 왼쪽 회전한 뒤, 그 결과(sub tree) 새롭게 루트가 된 노드를 반환한다.
 Node* AVLTree::leftRotate(Node* zNode) {
-    Node* yNode = zNode->get_right_child();
+    Node* yNode = zNode->get_right_child(); //회전 결과 sub root가 될 노드
     Node* tNode = yNode->get_left_child();
 
     //회전 수행
-    yNode->set_left_child(zNode);
-    zNode->set_right_child(tNode);
+    yNode->set_left_child(zNode); //yNode의 left child를 tNode에서 zNode로 바꾼다.
+    zNode->set_right_child(tNode); //zNode의 right child를 yNode에서 yNode의 기존 left child(=tNode)로 바꾼다.
 
     //회전하면서 위치가 달라졌으므로 높이 재계산
-    zNode->set_height(calculateHeight(zNode));
-    yNode->set_height(calculateHeight(yNode));
+    zNode->set_height(calculateHeight(zNode)); 
+    yNode->set_height(calculateHeight(yNode)); 
 
     return yNode;
 }
