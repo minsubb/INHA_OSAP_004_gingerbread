@@ -323,15 +323,24 @@ int AVLTree::isUnbalance(Node* curNode) {
 }
 
 //주어진 노드의 rank 반환. 재귀함수를 통해 자신보다 작은 값의 갯수를 더해준다.
-int AVLTree::getRank(Node *node, int x)
+int AVLTree::GetRank(Node *node, int x)
 {
-    if (node == NULL) return 0; //노드가 존재하지 않으면 0 리턴
-
     int rank = 0;
-    if (node->get_key() < x) rank++;
 
-    rank += getRank(node->get_left_child(), x);
-    rank += getRank(node->get_right_child(), x);
+    if (x <= node->get_key()) { //기준 키값이 현재 키값보다 작으면 왼쪽 자식만 탐색한다.
+        if(node->get_left_child()!=NULL) {
+            rank+=GetRank(node->get_left_child(),x);
+        }    
+    }
+    else if (x > node->get_key()) { //기준 키값이 현재 키값보다 크면 둘 다 탐색한다.
+        rank++;
+        if(node->get_left_child()!=NULL) {
+            rank+=GetRank(node->get_left_child(),x);
+        }
+        if(node->get_right_child()!=NULL){
+            rank+=GetRank(node->get_right_child(),x);
+        }
+    }
 
     return rank;
 }
