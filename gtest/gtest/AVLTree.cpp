@@ -29,8 +29,12 @@ void AVLTree::IncreaseSize() { size_++; }
 void AVLTree::DecreaseSize() { size_--; }
 void AVLTree::set_root(Node* root) { root_ = root; }
 
-void AVLTree::Empty() { (size_ == 0) ? printf("1\n") : printf("0\n"); }
-void AVLTree::Size() { printf("%d\n", size_); }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+// 테스트를 위해 조금 수정. 콘솔 출력 대신 리턴값으로 함수 바꿨음
+// void AVLTree::Empty() { (size_ == 0) ? printf("1\n") : printf("0\n"); }
+// void AVLTree::Size() { printf("%d\n", size_); }
+//-------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 
 //노드 x가 루트인 부분트리에서 최소 key를 갖는 노드의 key와 depth를 공백으로 구분하여 출력한다.
 void AVLTree::Minimum(int x) {

@@ -44,14 +44,18 @@ public:
     void DecreaseSize();
     void set_root(Node* root);
 
-    void Empty();
-    void Size();
+    //void Empty();
+    //void Size();
     void Minimum(int x);
     void Maximum(int x);
     void Find(int x);
     void Insert(int x);
     void Rank(int x);
     void Erase(int x);
+
+    //테스트를 위해 수정. 트리가 비어있으면 true, 아니면 false를 반환한다.
+    bool Empty() { return size_ == 0; }
+    int Size() { return size_; }
 
 private:
     Node* GetNode(int key);
