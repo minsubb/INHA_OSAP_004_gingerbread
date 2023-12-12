@@ -12,13 +12,27 @@ enum UNBALANCE_CASE {
     RIGHT_LEFT = 4
 };
 
-struct Node {
+// Minimum, Maximum 테스트를 위해 추가
+struct KeyDepthPair {
+    int key;
+    int depth;
+};
+
+// Rank 테스트를 위해 추가
+struct DepthRankPair {
+    int depth;
+    int rank;
+};
+
+
+class Node {
 public:
     Node(int key);
     ~Node();
 
     int get_key();
     int get_height();
+    int get_sub_size();
     Node* get_left_child();
     Node* get_right_child();
 
@@ -26,55 +40,57 @@ public:
     void set_height(int height);
     void set_left_child(Node* left_child);
     void set_right_child(Node* right_child);
+    void set_sub_size(int sub_size);
 
 private:
     int key_;
     int height_;
+    int sub_size_;
     Node* left_child_;
     Node* right_child_;
 };
 
+// AVLTree 클래스 정의
 class AVLTree {
 public:
     AVLTree();
-    int get_size();
     Node* get_root();
 
-    void IncreaseSize();
-    void DecreaseSize();
     void set_root(Node* root);
-
+    
+    bool Empty();
+    int Size();
     //void Empty();
     //void Size();
-    void Minimum(int x);
-    void Maximum(int x);
-    void Find(int x);
+    KeyDepthPair Minimum(int x);
+    KeyDepthPair Maximum(int x);
+    //void Minimum(int x);
+    //void Maximum(int x);
+    int Find(int x);
+    //void Find(int x);
     void Insert(int x);
-    void Rank(int x);
+    DepthRankPair Rank(int x);
+    //void Rank(int x);
     void Erase(int x);
 
-    //테스트를 위해 수정. 트리가 비어있으면 true, 아니면 false를 반환한다.
-    bool Empty() { return size_ == 0; }
-    int Size() { return size_; }
-
 private:
+    Node* root_;
+
     Node* GetNode(int key);
     int GetDepth(Node* node);
     int GetHeight(Node* node);
+    int GetSize(Node* node);
+    int GetRank(Node* node, int x);
     int IsUnbalance(Node* node);
     int CalculateBalanceFactor(Node* node);
     int CalculateHeight(Node* node);
-    int GetRank(Node* node, int x);
-
+    int CalculateSubSize(Node* node);
     Node* Insert(Node* node, int key);
     Node* DeleteNode(Node* node, int key);
     Node* MinValueNode(Node* node);
     Node* Restruct(Node* node);
     Node* RightRotate(Node* node);
     Node* LeftRotate(Node* node);
-
-    Node* root_;
-    int size_;
 };
 
 #endif // AVL_TREE_H
