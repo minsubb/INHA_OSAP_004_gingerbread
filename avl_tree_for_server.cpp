@@ -106,8 +106,8 @@ public:
     void set_root(Node<T>* root) { root_ = root; }
 
     //요구 사항(basic)
-    void Empty() override { printf("%d\n", (GetSize(root_) == 0) ? 1 : 0); }
-    void Size() override { printf("%d\n", GetSize(root_)); }
+    void Empty() override { cout << GetSize(root_) == 0) ? "1\n" : "0\n"; }
+    void Size() override { cout << GetSize(root_) << "\n"; }
     void Minimum(T x) override;
     void Maximum(T x) override;
     void Find(T x) override;
@@ -369,8 +369,8 @@ void AVLTree<T>::Find(T x) {
     Node<T>* find_node = GetNode(x); //key == x인 노드 찾기
 
     //find_node가 NULL이라면 노드가 없다는 뜻이므로 0을 출력하고, 아니라면 노드의 depth를 출력한다.
-    if (find_node == NULL) printf("0\n");
-    else printf("%d\n", GetDepth(find_node));
+    if (find_node == NULL) cout << "0\n";
+    else cout << GetDepth(find_node) << "\n";
 
     return;
 }
@@ -411,7 +411,7 @@ void AVLTree<T>::Insert(T x) {
 
     //삽입한 노드의 depth를 출력한다.
     Node<T>* new_node = GetNode(x);
-    printf("%d\n", GetDepth(new_node));
+    cout << GetDepth(new_node) << "\n";
 
     return;
 }
@@ -424,14 +424,14 @@ void AVLTree<T>::Rank(T x) {
 
     // 노드 x가 없다면 0을 출력하고 종료한다.
     if (rank_node == NULL) {
-        printf("0\n");
+        cout << "0\n";
         return;
     }
     // 노드 x가 존재한다면 depth와 rank를 출력한다.
     else {
         int depth = GetDepth(rank_node);
         int rank = GetRank(get_root(), rank_node->get_key());
-        printf("%d %d\n", depth, rank);
+        cout << depth << " " << rank << "\n";
         return;
     }
 }
@@ -443,13 +443,13 @@ void AVLTree<T>::Erase(T x) {
 
     //만약 노드가 없으면 0을 출력하고 종료한다.
     if (node_to_delete == NULL) {
-        printf("0\n");
+        cout << "0\n";
         return;
     }
 
     //삭제할 노드의 깊이 출력
     int depth = GetDepth(node_to_delete);
-    printf("%d\n", depth);
+    cout << depth << "\n";
 
     //노드 삭제. 실질적인 삭제는 private 함수에서 수행한다.
     root_ = DeleteNode(root_, x);
