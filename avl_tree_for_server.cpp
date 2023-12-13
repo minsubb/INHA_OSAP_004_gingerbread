@@ -106,7 +106,7 @@ public:
     void set_root(Node<T>* root) { root_ = root; }
 
     //요구 사항(basic)
-    void Empty() override { cout << GetSize(root_) == 0) ? "1\n" : "0\n"; }
+    void Empty() override { (GetSize(root_) == 0) ? cout << "1\n" : cout << "0\n"; }
     void Size() override { cout << GetSize(root_) << "\n"; }
     void Minimum(T x) override;
     void Maximum(T x) override;
@@ -160,7 +160,7 @@ int main() {
     cin >> t;
     while (t--) {
         string type;
-        cin >> type;
+        type = "int";
 
         if(type=="int"){
             AVLTree <int> avlTree;
