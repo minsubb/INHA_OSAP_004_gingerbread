@@ -304,7 +304,7 @@ int main() {
             }
         }
         else if(type=="string"){
-            AVLTree <std::string> avlTree;
+            AVLTree <string> avlTree;
             int q;
             cin >> q;
             while (q--) {
@@ -322,7 +322,7 @@ int main() {
                 }
 
                 //추가 입력(x) 필요 
-                std::string x;
+                string x;
                 cin >> x;
                 if (command == "minimum") {
                     avlTree.Minimum(x);
@@ -384,7 +384,7 @@ void AVLTree<T>::Maximum(T x) {
     while (maximum_node->get_right_child() != NULL) { //오른쪽 자식이 NULL이라면 최대로 내려온 것이므로 반복문 종료
         maximum_node = maximum_node->get_right_child();
     }
-    std::cout << maximum_node->get_key() << " " << GetDepth(maximum_node) << std::endl;
+    cout << maximum_node->get_key() << " " << GetDepth(maximum_node) << endl;
     
     return;
 }
@@ -398,7 +398,7 @@ void AVLTree<T>::Minimum(T x) {
     while (minimum_node->get_left_child() != NULL) { //왼쪽 자식이 NULL이라면 최대로 내려온 것이므로 반복문 종료
         minimum_node = minimum_node->get_left_child();
     }
-    std::cout << minimum_node->get_key() << " " << GetDepth(minimum_node) << std::endl;
+    cout << minimum_node->get_key() << " " << GetDepth(minimum_node) << endl;
 
     return;
 }
