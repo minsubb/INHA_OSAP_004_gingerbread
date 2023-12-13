@@ -1,3 +1,27 @@
+/*
+The MIT License
+
+Copyright (c) <2023> <Minsub Kim, Jiwon Park, Jeonghui Han>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
 /*------------------------------------------------------------------------------------------------------------------*/
 /*                                                                                                                  */
 /*                                        Libraries, Types, Global variables..                                      */
@@ -82,8 +106,8 @@ public:
     void set_root(Node<T>* root) { root_ = root; }
 
     //요구 사항(basic)
-    void Empty() override { printf("%d\n", (GetSize(root_) == 0) ? 1 : 0); }
-    void Size() override { printf("%d\n", GetSize(root_)); }
+    void Empty() override { (GetSize(root_) == 0) ? cout << "1\n" : cout << "0\n"; }
+    void Size() override { cout << GetSize(root_) << "\n"; }
     void Minimum(T x) override;
     void Maximum(T x) override;
     void Find(T x) override;
@@ -136,7 +160,7 @@ int main() {
     cin >> t;
     while (t--) {
         string type;
-        cin >> type;
+        type = "int";
 
         if(type=="int"){
             AVLTree <int> avlTree;
@@ -280,7 +304,7 @@ int main() {
             }
         }
         else if(type=="string"){
-            AVLTree <std::string> avlTree;
+            AVLTree <string> avlTree;
             int q;
             cin >> q;
             while (q--) {
@@ -298,7 +322,7 @@ int main() {
                 }
 
                 //추가 입력(x) 필요 
-                std::string x;
+                string x;
                 cin >> x;
                 if (command == "minimum") {
                     avlTree.Minimum(x);
@@ -345,8 +369,8 @@ void AVLTree<T>::Find(T x) {
     Node<T>* find_node = GetNode(x); //key == x인 노드 찾기
 
     //find_node가 NULL이라면 노드가 없다는 뜻이므로 0을 출력하고, 아니라면 노드의 depth를 출력한다.
-    if (find_node == NULL) printf("0\n");
-    else printf("%d\n", GetDepth(find_node));
+    if (find_node == NULL) cout << "0\n";
+    else cout << GetDepth(find_node) << "\n";
 
     return;
 }
@@ -360,7 +384,7 @@ void AVLTree<T>::Maximum(T x) {
     while (maximum_node->get_right_child() != NULL) { //오른쪽 자식이 NULL이라면 최대로 내려온 것이므로 반복문 종료
         maximum_node = maximum_node->get_right_child();
     }
-    std::cout << maximum_node->get_key() << " " << GetDepth(maximum_node) << std::endl;
+    cout << maximum_node->get_key() << " " << GetDepth(maximum_node) << endl;
     
     return;
 }
@@ -374,7 +398,7 @@ void AVLTree<T>::Minimum(T x) {
     while (minimum_node->get_left_child() != NULL) { //왼쪽 자식이 NULL이라면 최대로 내려온 것이므로 반복문 종료
         minimum_node = minimum_node->get_left_child();
     }
-    std::cout << minimum_node->get_key() << " " << GetDepth(minimum_node) << std::endl;
+    cout << minimum_node->get_key() << " " << GetDepth(minimum_node) << endl;
 
     return;
 }
@@ -387,7 +411,7 @@ void AVLTree<T>::Insert(T x) {
 
     //삽입한 노드의 depth를 출력한다.
     Node<T>* new_node = GetNode(x);
-    printf("%d\n", GetDepth(new_node));
+    cout << GetDepth(new_node) << "\n";
 
     return;
 }
@@ -400,14 +424,14 @@ void AVLTree<T>::Rank(T x) {
 
     // 노드 x가 없다면 0을 출력하고 종료한다.
     if (rank_node == NULL) {
-        printf("0\n");
+        cout << "0\n";
         return;
     }
     // 노드 x가 존재한다면 depth와 rank를 출력한다.
     else {
         int depth = GetDepth(rank_node);
         int rank = GetRank(get_root(), rank_node->get_key());
-        printf("%d %d\n", depth, rank);
+        cout << depth << " " << rank << "\n";
         return;
     }
 }
@@ -419,13 +443,13 @@ void AVLTree<T>::Erase(T x) {
 
     //만약 노드가 없으면 0을 출력하고 종료한다.
     if (node_to_delete == NULL) {
-        printf("0\n");
+        cout << "0\n";
         return;
     }
 
     //삭제할 노드의 깊이 출력
     int depth = GetDepth(node_to_delete);
-    printf("%d\n", depth);
+    cout << depth << "\n";
 
     //노드 삭제. 실질적인 삭제는 private 함수에서 수행한다.
     root_ = DeleteNode(root_, x);
