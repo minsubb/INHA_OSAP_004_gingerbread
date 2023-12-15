@@ -1,3 +1,2 @@
-﻿  pch.cpp
-  test.cpp
+﻿  test.cc
   googleTest.vcxproj -> C:\Users\aalab\source\repos\gtest_for_template2\x64\Debug\googleTest.exe
