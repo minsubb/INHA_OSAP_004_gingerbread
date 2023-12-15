@@ -1,0 +1,4 @@
+C:\Users\aalab\source\repos\gtest\googleTest\x64\Debug\googleTest.vcxproj.CopyComplete
+C:\Users\aalab\source\repos\gtest_for_template\googleTest\x64\Debug\googleTest.vcxproj.CopyComplete
+C:\Users\aalab\source\repos\gtest_for_template - 복사본\googleTest\x64\Debug\googleTest.vcxproj.CopyComplete
+C:\Users\aalab\source\repos\gtest_for_template2\googleTest\x64\Debug\googleTest.vcxproj.CopyComplete
