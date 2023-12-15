@@ -1,3 +1,27 @@
+/*
+The MIT License
+
+Copyright (c) <2023> <Minsub Kim, Jiwon Park, Jeonghui Han>
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+*/
+
 /*------------------------------------------------------------------------------------------------------------------*/
 /*                                                                                                                  */
 /*                                        Libraries, Types, Global variables..                                      */
@@ -25,80 +49,96 @@ enum UNBALANCE_CASE {
 /*                                                                                                                  */
 /*------------------------------------------------------------------------------------------------------------------*/
 
+template <typename T>
 struct Node {
 public:
     //생성자와 소멸자
-    Node(int key) : key_(key), height_(0), sub_size_(1) { left_child_ = right_child_ = NULL; }
+    Node(T key) : key_(key), height_(0), sub_size_(1) { left_child_ = right_child_ = NULL; }
     ~Node() {}
 
     //접근자
-    int get_key() { return key_; }
+    T get_key() { return key_; }
     int get_height() { return height_; }
     int get_sub_size() { return sub_size_; }
     Node* get_left_child() { return left_child_; }
     Node* get_right_child() { return right_child_; }
 
     //제어자
-    void set_key(int key) { key_ = key; }
+    void set_key(T key) { key_ = key; }
     void set_height(int height) { height_ = height; }
     void set_left_child(Node* left_child) { left_child_ = left_child; }
     void set_right_child(Node* right_child) { right_child_ = right_child; }
     void set_sub_size(int sub_size) { sub_size_ = sub_size; }
 
 private:
-    int key_;
+    T key_;
     int height_; //insert/erase를 O(log n)에 수행하기 위해 추가한 멤버 변수
     int sub_size_; //rank를 O(log n)에 수행하기 위해 추가한 멤버 변수
     Node* left_child_;
     Node* right_child_;
 };
 
+template <typename T>
+class Set{
+public:
+    virtual ~Set() {}
 
-class AVLTree {
+    virtual void Empty() = 0;
+    virtual void Size() = 0;
+    virtual void Minimum(T x) = 0;
+    virtual void Maximum(T x) = 0;
+    virtual void Find(T x) = 0;
+    virtual void Insert(T x) = 0;
+    virtual void Rank(T x) = 0;
+    virtual void Erase(T x) = 0;
+};
+
+template <typename T>
+class AVLTree : public Set<T>{
 public:
     //생성자
     AVLTree() : root_(NULL) {}
 
     //접근자
-    Node* get_root() { return root_; }
+    Node<T>* get_root() { return root_; }
 
     //제어자
-    void set_root(Node* root) { root_ = root; }
+    void set_root(Node<T>* root) { root_ = root; }
 
     //요구 사항(basic)
-    void Empty() { printf("%d\n", (GetSize(root_) == 0) ? 1 : 0); }
-    void Size() { printf("%d\n", GetSize(root_)); }
-    void Minimum(int x);
-    void Maximum(int x);
-    void Find(int x);
-    void Insert(int x);
+    void Empty() override { (GetSize(root_) == 0) ? cout << "1\n" : cout << "0\n"; }
+    void Size() override { cout << GetSize(root_) << "\n"; }
+    void Minimum(T x) override;
+    void Maximum(T x) override;
+    void Find(T x) override;
+    void Insert(T x) override;
 
     //요구 사항(advance)
-    void Rank(int x);
-    void Erase(int x);
+    void Rank(T x) override;
+    void Erase(T x) override;
 
 private:
     //노드 상태 계산 함수
-    Node* GetNode(int key);
-    int GetDepth(Node* node);
-    int GetHeight(Node* node) { return (node == NULL) ? -1 : node->get_height(); }
-    int GetSize(Node* node) { return (node == NULL) ? 0 : node->get_sub_size(); }
-    int GetRank(Node* node, int x);
-    int IsUnbalance(Node* node);
-    int CalculateBalanceFactor(Node* node);
-    int CalculateHeight(Node* node);
-    int CalculateSubSize(Node* node);
+    Node<T>* GetNode(T key);
+    int GetDepth(Node<T>* node);
+    int GetHeight(Node<T>* node) { return (node == NULL) ? -1 : node->get_height(); }
+    int GetSize(Node<T>* node) { return (node == NULL) ? 0 : node->get_sub_size(); }
+    int GetRank(Node<T>* node, T x);
+    int IsUnbalance(Node<T>* node);
+    int CalculateBalanceFactor(Node<T>* node);
+    int CalculateHeight(Node<T>* node);
+    int CalculateSubSize(Node<T>* node);
 
     //기능 구현을 위한 추가적인 함수
-    Node* Insert(Node* node, int key);
-    Node* DeleteNode(Node* node, int key);
-    Node* MinValueNode(Node* node);
-    Node* Restruct(Node* node);
-    Node* RightRotate(Node* node);
-    Node* LeftRotate(Node* node);
+    Node<T>* Insert(Node<T>* node, T key);
+    Node<T>* DeleteNode(Node<T>* node, T key);
+    Node<T>* MinValueNode(Node<T>* node);
+    Node<T>* Restruct(Node<T>* node);
+    Node<T>* RightRotate(Node<T>* node);
+    Node<T>* LeftRotate(Node<T>* node);
 
 private:
-    Node* root_;
+    Node<T>* root_;
 };
 
 
@@ -110,6 +150,7 @@ private:
 /*                                                                                                                  */
 /*------------------------------------------------------------------------------------------------------------------*/
 
+
 int main() {
     ios_base::sync_with_stdio(false);
     cin.tie(NULL);
@@ -118,49 +159,195 @@ int main() {
     int t;
     cin >> t;
     while (t--) {
-        AVLTree avlTree;
-        int q;
-        cin >> q;
-        while (q--) {
-            string command;
-            cin >> command;
+        string type;
+        type = "int";
 
-            //추가 입력(x) 불필요
-            if (command == "empty") {
-                avlTree.Empty();
-                continue;
-            }
-            if (command == "size") {
-                avlTree.Size();
-                continue;
-            }
+        if(type=="int"){
+            AVLTree <int> avlTree;
+            int q;
+            cin >> q;
+            while (q--) {
+                string command;
+                cin >> command;
 
-            //추가 입력(x) 필요 
-            int x;
-            cin >> x;
-            if (command == "minimum") {
-                avlTree.Minimum(x);
-                continue;
+                //추가 입력(x) 불필요
+                if (command == "empty") {
+                    avlTree.Empty();
+                    continue;
+                }
+                if (command == "size") {
+                    avlTree.Size();
+                    continue;
+                }
+
+                //추가 입력(x) 필요 
+                int x;
+                cin >> x;
+                if (command == "minimum") {
+                    avlTree.Minimum(x);
+                    continue;
+                }
+                if (command == "maximum") {
+                    avlTree.Maximum(x);
+                    continue;
+                }
+                if (command == "find") {
+                    avlTree.Find(x);
+                    continue;
+                }
+                if (command == "insert") {
+                    avlTree.Insert(x);
+                    continue;
+                }
+                if (command == "rank") {
+                    avlTree.Rank(x);
+                    continue;
+                }
+                if (command == "erase") {
+                    avlTree.Erase(x);
+                    continue;
+                }
             }
-            if (command == "maximum") {
-                avlTree.Maximum(x);
-                continue;
+        }
+        else if(type=="double"){
+            AVLTree <double> avlTree;
+            int q;
+            cin >> q;
+            while (q--) {
+                string command;
+                cin >> command;
+
+                //추가 입력(x) 불필요
+                if (command == "empty") {
+                    avlTree.Empty();
+                    continue;
+                }
+                if (command == "size") {
+                    avlTree.Size();
+                    continue;
+                }
+
+                //추가 입력(x) 필요 
+                double x;
+                cin >> x;
+                if (command == "minimum") {
+                    avlTree.Minimum(x);
+                    continue;
+                }
+                if (command == "maximum") {
+                    avlTree.Maximum(x);
+                    continue;
+                }
+                if (command == "find") {
+                    avlTree.Find(x);
+                    continue;
+                }
+                if (command == "insert") {
+                    avlTree.Insert(x);
+                    continue;
+                }
+                if (command == "rank") {
+                    avlTree.Rank(x);
+                    continue;
+                }
+                if (command == "erase") {
+                    avlTree.Erase(x);
+                    continue;
+                }
             }
-            if (command == "find") {
-                avlTree.Find(x);
-                continue;
+        }
+        else if(type=="char"){
+            AVLTree <char> avlTree;
+            int q;
+            cin >> q;
+            while (q--) {
+                string command;
+                cin >> command;
+
+                //추가 입력(x) 불필요
+                if (command == "empty") {
+                    avlTree.Empty();
+                    continue;
+                }
+                if (command == "size") {
+                    avlTree.Size();
+                    continue;
+                }
+
+                //추가 입력(x) 필요 
+                char x;
+                cin >> x;
+                if (command == "minimum") {
+                    avlTree.Minimum(x);
+                    continue;
+                }
+                if (command == "maximum") {
+                    avlTree.Maximum(x);
+                    continue;
+                }
+                if (command == "find") {
+                    avlTree.Find(x);
+                    continue;
+                }
+                if (command == "insert") {
+                    avlTree.Insert(x);
+                    continue;
+                }
+                if (command == "rank") {
+                    avlTree.Rank(x);
+                    continue;
+                }
+                if (command == "erase") {
+                    avlTree.Erase(x);
+                    continue;
+                }
             }
-            if (command == "insert") {
-                avlTree.Insert(x);
-                continue;
-            }
-            if (command == "rank") {
-                avlTree.Rank(x);
-                continue;
-            }
-            if (command == "erase") {
-                avlTree.Erase(x);
-                continue;
+        }
+        else if(type=="string"){
+            AVLTree <string> avlTree;
+            int q;
+            cin >> q;
+            while (q--) {
+                string command;
+                cin >> command;
+
+                //추가 입력(x) 불필요
+                if (command == "empty") {
+                    avlTree.Empty();
+                    continue;
+                }
+                if (command == "size") {
+                    avlTree.Size();
+                    continue;
+                }
+
+                //추가 입력(x) 필요 
+                string x;
+                cin >> x;
+                if (command == "minimum") {
+                    avlTree.Minimum(x);
+                    continue;
+                }
+                if (command == "maximum") {
+                    avlTree.Maximum(x);
+                    continue;
+                }
+                if (command == "find") {
+                    avlTree.Find(x);
+                    continue;
+                }
+                if (command == "insert") {
+                    avlTree.Insert(x);
+                    continue;
+                }
+                if (command == "rank") {
+                    avlTree.Rank(x);
+                    continue;
+                }
+                if (command == "erase") {
+                    avlTree.Erase(x);
+                    continue;
+                }
             }
         }
     }
@@ -177,86 +364,92 @@ int main() {
 
 
 //노드 x의 depth를 출력한다. 만약 노드 x가 없다면, 0을 출력한다.
-void AVLTree::Find(int x) {
-    Node* find_node = GetNode(x); //key == x인 노드 찾기
+template <typename T>
+void AVLTree<T>::Find(T x) {
+    Node<T>* find_node = GetNode(x); //key == x인 노드 찾기
 
     //find_node가 NULL이라면 노드가 없다는 뜻이므로 0을 출력하고, 아니라면 노드의 depth를 출력한다.
-    if (find_node == NULL) printf("0\n");
-    else printf("%d\n", GetDepth(find_node));
+    if (find_node == NULL) cout << "0\n";
+    else cout << GetDepth(find_node) << "\n";
 
     return;
 }
 
 //노드 x가 루트인 부분트리에서 최대 key를 갖는 노드의 key와 depth를 공백으로 구분하여 출력한다.
-void AVLTree::Maximum(int x) {
-    Node* maximum_node = GetNode(x); //key == x인 노드 찾기 -> sub root
+template <typename T>
+void AVLTree<T>::Maximum(T x) {
+    Node<T>* maximum_node = GetNode(x); //key == x인 노드 찾기 -> sub root
 
     //최대 key는 sub root의 가장 최하단에 위치한 오른쪽 노드이므로 loop로 해당 지점까지 내려간다.
     while (maximum_node->get_right_child() != NULL) { //오른쪽 자식이 NULL이라면 최대로 내려온 것이므로 반복문 종료
         maximum_node = maximum_node->get_right_child();
     }
-    printf("%d %d\n", maximum_node->get_key(), GetDepth(maximum_node));
-
+    cout << maximum_node->get_key() << " " << GetDepth(maximum_node) << endl;
+    
     return;
 }
 
 //노드 x가 루트인 부분트리에서 최소 key를 갖는 노드의 key와 depth를 공백으로 구분하여 출력한다.
-void AVLTree::Minimum(int x) {
-    Node* minimum_node = GetNode(x);
+template <typename T>
+void AVLTree<T>::Minimum(T x) {
+    Node<T>* minimum_node = GetNode(x);
 
     //최소 key는 sub root의 가장 최하단에 위치한 왼쪽 노드이므로 loop로 해당 지점까지 내려간다.
     while (minimum_node->get_left_child() != NULL) { //왼쪽 자식이 NULL이라면 최대로 내려온 것이므로 반복문 종료
         minimum_node = minimum_node->get_left_child();
     }
-    printf("%d %d\n", minimum_node->get_key(), GetDepth(minimum_node));
+    cout << minimum_node->get_key() << " " << GetDepth(minimum_node) << endl;
 
     return;
 }
 
 //새로운 노드 x를 삽입하고, 노드 x의 depth를 출력한다.
-void AVLTree::Insert(int x) {
+template <typename T>
+void AVLTree<T>::Insert(T x) {
     //노드 삽입. 실질적인 삽입은 private 함수에서 수행한다.
     set_root(Insert(root_, x));
 
     //삽입한 노드의 depth를 출력한다.
-    Node* new_node = GetNode(x);
-    printf("%d\n", GetDepth(new_node));
+    Node<T>* new_node = GetNode(x);
+    cout << GetDepth(new_node) << "\n";
 
     return;
 }
 
 
 //노드 x의 depth와 rank를 공백으로 구분하여 출력한다. 만약 노드 x가 없다면, 0을 출력한다.
-void AVLTree::Rank(int x) {
-    Node* rank_node = GetNode(x); // key == x인 노드 찾기
+template <typename T>
+void AVLTree<T>::Rank(T x) {
+    Node<T>* rank_node = GetNode(x); // key == x인 노드 찾기
 
     // 노드 x가 없다면 0을 출력하고 종료한다.
     if (rank_node == NULL) {
-        printf("0\n");
+        cout << "0\n";
         return;
     }
     // 노드 x가 존재한다면 depth와 rank를 출력한다.
     else {
         int depth = GetDepth(rank_node);
         int rank = GetRank(get_root(), rank_node->get_key());
-        printf("%d %d\n", depth, rank);
+        cout << depth << " " << rank << "\n";
         return;
     }
 }
 
 //노드 x의 depth를 출력하고 해당 노드를 삭제한다. 만약 노드 x가 없다면, 0을 출력한다.
-void AVLTree::Erase(int x) {
-    Node* node_to_delete = GetNode(x); // 삭제할 노드 찾기
+template <typename T>
+void AVLTree<T>::Erase(T x) {
+    Node<T>* node_to_delete = GetNode(x); // 삭제할 노드 찾기
 
     //만약 노드가 없으면 0을 출력하고 종료한다.
     if (node_to_delete == NULL) {
-        printf("0\n");
+        cout << "0\n";
         return;
     }
 
     //삭제할 노드의 깊이 출력
     int depth = GetDepth(node_to_delete);
-    printf("%d\n", depth);
+    cout << depth << "\n";
 
     //노드 삭제. 실질적인 삭제는 private 함수에서 수행한다.
     root_ = DeleteNode(root_, x);
@@ -275,8 +468,9 @@ void AVLTree::Erase(int x) {
 
 
 //주어진 key와 일치하는 노드를 찾아 노드의 포인터를 반환한다.
-Node* AVLTree::GetNode(int key) {
-    Node* current_node = get_root(); //root부터 시작
+template <typename T>
+Node<T>* AVLTree<T>::GetNode(T key) {
+    Node<T>* current_node = get_root(); //root부터 시작
 
     while (true) {
         if (current_node == NULL) return NULL; //찾기 실패
@@ -292,13 +486,14 @@ Node* AVLTree::GetNode(int key) {
 
 
 //주어진 노드에 대해 깊이(depth)를 계산하여 반환한다.
-int AVLTree::GetDepth(Node* current_node) {
+template <typename T>
+int AVLTree<T>::GetDepth(Node<T>* current_node) {
     if (current_node == get_root()) return 0; //root의 깊이는 0으로 정의
 
     //root부터 시작하여 특정 노드를 찾을 때까지 depth를 1증가시키며 내려간다.
     int depth = 0;
-    int key = current_node->get_key();
-    Node* tempNode = root_;
+    T key = current_node->get_key();
+    Node<T>* tempNode = root_;
     while (true) {
         if (current_node == tempNode) return depth; //특정 노드를 찾았다면 종료
 
@@ -313,7 +508,8 @@ int AVLTree::GetDepth(Node* current_node) {
 
 //주어진 노드에 대해 높이(height)를 계산하여 반환한다.
 //height의 정의: 두 자식 노드 중 더 큰 height를 가지는 자식 노드의 height + 1
-int AVLTree::CalculateHeight(Node* node) {
+template <typename T>
+int AVLTree<T>::CalculateHeight(Node<T>* node) {
     //존재하지 않는 노드의 높이는 -1, 리프 노드의 높이는 0으로 정의한다.
     if (node == NULL) return -1;
 
@@ -325,7 +521,8 @@ int AVLTree::CalculateHeight(Node* node) {
 
 //주어진 노드에 대해 높이(height)를 계산하여 반환한다.
 //sub size의 정의:양쪽 자식 노드의 크기 + 1(본인을 포함한 subTree의 크기)
-int AVLTree::CalculateSubSize(Node* node) {
+template <typename T>
+int AVLTree<T>::CalculateSubSize(Node<T>* node) {
     //존재하지 않는 노드의 크기는 0, 리프 노드의 크기는 1로 정의한다.
     if (node == NULL) return 0;
 
@@ -338,7 +535,8 @@ int AVLTree::CalculateSubSize(Node* node) {
 
 //주어진 노드에 대해 균형 인수(balance factor)를 계산하여 반환한다. 반환값은 -2~2 사이이다.
 //BalanceFactor의 정의: 두 자식 노드의 높이차 -> left child - right child로 정의
-int AVLTree::CalculateBalanceFactor(Node* node) {
+template <typename T>
+int AVLTree<T>::CalculateBalanceFactor(Node<T>* node) {
     if (node == NULL) return 0; //존재하지 않는 노드의 균형인수는 0으로 정의
 
     int left_child_height = GetHeight(node->get_left_child());
@@ -350,7 +548,8 @@ int AVLTree::CalculateBalanceFactor(Node* node) {
 
 
 //주어진 노드에 대해 균형 여부를 판단하여 반환한다. 반환값은 0(BALANCE), 1~4(UNBALNCE) 사이이다.
-int AVLTree::IsUnbalance(Node* curNode) {
+template <typename T>
+int AVLTree<T>::IsUnbalance(Node<T>* curNode) {
     int balance_factor = CalculateBalanceFactor(curNode);
     if (abs(balance_factor) < 2) return BALANCE;
 
@@ -371,11 +570,12 @@ int AVLTree::IsUnbalance(Node* curNode) {
 }
 
 //주어진 노드의 rank 반환. 재귀함수를 통해 자신보다 작은 값의 갯수를 더해준다.
-int AVLTree::GetRank(Node* node, int key) {
+template <typename T>
+int AVLTree<T>::GetRank(Node<T>* node, T key) {
     //basecase: 본인이 NULL이라면 존재하지 않는 것이므로 0을 반환
     if (node == NULL)return 0;
 
-    int node_key = node->get_key();
+    T node_key = node->get_key();
     //기준 키가 더 큰 경우 왼쪽+자신을 더한 뒤 오른쪽을 탐색해봐야 함
     if (node_key < key) {
         int sub_rank = GetSize(node->get_left_child()) + 1;
@@ -393,10 +593,11 @@ int AVLTree::GetRank(Node* node, int key) {
 }
 
 //실질적인 삽입을 수행한 뒤, 서브 트리의 루트 노드를 반환한다.
-Node* AVLTree::Insert(Node* node, int key) {
+template <typename T>
+Node<T>* AVLTree<T>::Insert(Node<T>* node, T key) {
     //본인의 자리를 찾은 경우 -> 새 노드를 할당하여 반환
     if (node == NULL) {
-        return new Node(key);
+        return new Node<T>(key);
     }
     //본인의 자리를 찾지 못한 경우 -> 재귀적으로 내려가며 삽입 위치 탐색
     (node->get_key() < key) ?
@@ -413,7 +614,8 @@ Node* AVLTree::Insert(Node* node, int key) {
 }
 
 //실질적인 삭제를 수행한 뒤, 서브 트리의 루트 노드를 반환한다.
-Node* AVLTree::DeleteNode(Node* root, int key) {
+template <typename T>
+Node<T>* AVLTree<T>::DeleteNode(Node<T>* root, T key) {
     if (root == NULL) return root;
 
     // 삭제할 키를 찾음
@@ -426,7 +628,7 @@ Node* AVLTree::DeleteNode(Node* root, int key) {
     else {
         // key == root->get_key()로 삭제할 노드를 찾은 것이니 삭제 수행
         if ((root->get_left_child() == NULL) || (root->get_right_child() == NULL)) {
-            Node* temp = root->get_left_child() ? root->get_left_child() : root->get_right_child();
+            Node<T>* temp = root->get_left_child() ? root->get_left_child() : root->get_right_child();
 
             // 자식 노드가 없는 경우 직접 삭제
             if (temp == NULL) {
@@ -441,7 +643,7 @@ Node* AVLTree::DeleteNode(Node* root, int key) {
         }
         else {
             // 두 개의 자식을 가진 경우 후임자를 이용하여 삭제 수행
-            Node* temp = MinValueNode(root->get_right_child());
+            Node<T>* temp = MinValueNode(root->get_right_child());
             root->set_key(temp->get_key());
             root->set_right_child(DeleteNode(root->get_right_child(), temp->get_key()));
         }
@@ -460,8 +662,9 @@ Node* AVLTree::DeleteNode(Node* root, int key) {
 
 
 // 주어진 노드의 서브트리에서 가장 작은 값을 가진 노드를 찾아 반환한다.
-Node* AVLTree::MinValueNode(Node* node) {
-    Node* current = node;
+template <typename T>
+Node<T>* AVLTree<T>::MinValueNode(Node<T>* node) {
+    Node<T>* current = node;
     while (current->get_left_child() != NULL) {
         current = current->get_left_child();
     }
@@ -469,7 +672,8 @@ Node* AVLTree::MinValueNode(Node* node) {
 }
 
 //주어진 노드가 불균형한 경우 적절히 회전하여 균형을 맞춘 뒤, 서브 트리의 루트 노드를 반환한다.
-Node* AVLTree::Restruct(Node* node) {
+template <typename T>
+Node<T>* AVLTree<T>::Restruct(Node<T>* node) {
     switch (IsUnbalance(node)) { //균형 여부 판단은 isUnbalance에서 수행하여 반환
         //균형 -> 0번의 회전 필요
     case BALANCE: {
@@ -486,12 +690,12 @@ Node* AVLTree::Restruct(Node* node) {
 
                     //불균형2 -> 2번의 회전 필요(double rotate)
     case LEFT_RIGHT: {
-        Node* child_node = node->get_left_child();
+        Node<T>* child_node = node->get_left_child();
         node->set_left_child(LeftRotate(child_node)); //yNode에 대해 left rotate 수행
         return RightRotate(node); //zNode에 대해 right rotate 수행
     }
     case RIGHT_LEFT: {
-        Node* child_node = node->get_right_child();
+        Node<T>* child_node = node->get_right_child();
         node->set_right_child(RightRotate(child_node)); //yNode에 대해 right rotate 수행
         return LeftRotate(node); //zNode에 대해 left rotate 수행
     }
@@ -500,9 +704,10 @@ Node* AVLTree::Restruct(Node* node) {
 }
 
 //문제가 된 노드를 인수로 받아 오른쪽 회전한 뒤, 그 결과(sub tree) 새롭게 루트가 된 노드를 반환한다.
-Node* AVLTree::RightRotate(Node* zNode) {
-    Node* yNode = zNode->get_left_child(); //회전 결과 sub root가 될 노드
-    Node* tNode = yNode->get_right_child();
+template <typename T>
+Node<T>* AVLTree<T>::RightRotate(Node<T>* zNode) {
+    Node<T>* yNode = zNode->get_left_child(); //회전 결과 sub root가 될 노드
+    Node<T>* tNode = yNode->get_right_child();
 
     //회전 수행
     yNode->set_right_child(zNode); //yNode의 right child를 tNode에서 zNode로 바꾼다.
@@ -521,9 +726,10 @@ Node* AVLTree::RightRotate(Node* zNode) {
 }
 
 //문제가 된 노드를 인수로 받아 왼쪽 회전한 뒤, 그 결과(sub tree) 새롭게 루트가 된 노드를 반환한다.
-Node* AVLTree::LeftRotate(Node* zNode) {
-    Node* yNode = zNode->get_right_child(); //회전 결과 sub root가 될 노드
-    Node* tNode = yNode->get_left_child();
+template <typename T>
+Node<T>* AVLTree<T>::LeftRotate(Node<T>* zNode) {
+    Node<T>* yNode = zNode->get_right_child(); //회전 결과 sub root가 될 노드
+    Node<T>* tNode = yNode->get_left_child();
 
     //회전 수행
     yNode->set_left_child(zNode); //yNode의 left child를 tNode에서 zNode로 바꾼다.
